@@ -1,0 +1,71 @@
+.required_input
+{
+color:#ac9000;
+}
+
+.font-required
+{
+    font-size:12px;
+    font-weight: 600;
+    vertical-align: super;
+}
+
+.activate
+{
+ color:green;
+}
+
+.inactivate
+{
+ color:orange;
+}
+
+a.disabled {
+  cursor: not-allowed;
+  /*pointer-events: initial !important;
+  /*pointer-events: none;
+  /*pointer-events: all !important;
+    /*pointer-events: none;
+    color: #ccc;
+    /*cursor: not-allowed;*/
+}
+
+.btn-back
+{
+    background-color: #505050;
+    color: white;
+}
+
+.top-padding
+{
+    margin-top:20px;
+}
+
+/* Esconde o input */
+.esconder_arquivo {
+    display: none;
+  }
+  
+  /* Aparência que terá o seletor de arquivo */
+  .input-wrapper label {
+    background-color: #3498db;
+    border-radius: 5px;
+    color: #fff;
+    padding: 6px 20px
+  }
+  
+  .input-wrapper label:hover {
+    background-color: #2980b9
+  }
+
+  .strong_title
+{
+  font-weight: bold;
+}
+
+#banner-message {
+  font-size: 13px;
+  font-weight: bold;
+  text-align: right;
+  color:rgb(255, 0, 0);
+}

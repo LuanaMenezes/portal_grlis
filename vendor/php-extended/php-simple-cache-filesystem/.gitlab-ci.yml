@@ -1,0 +1,404 @@
+# HELP : https://gitlab.com/help/ci/yaml/README.md
+# Global defaults for all jobs
+default:
+  interruptible: true
+
+stages:
+  - build
+  - test
+
+
+# // ---- Jobs ---- \\ #
+# Find container registries images at
+# https://gitlab.com/php-extended/docker-images/container_registry/
+# And image files at
+# https://gitlab.com/php-extended/docker-images
+
+# // Stage build
+
+composer-7.1:
+  stage: build
+  image: "$CI_REGISTRY/php-extended/docker-images:php-7.1-buster-cli-dev"
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php71
+    policy: push
+    paths:
+      - vendor/
+  script:
+    - php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist
+
+composer-7.2:
+  stage: build
+  image: "$CI_REGISTRY/php-extended/docker-images:php-7.2-buster-cli-dev"
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php72
+    policy: push
+    paths:
+      - vendor/
+  script:
+    - php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist
+
+composer-7.3:
+  stage: build
+  image: "$CI_REGISTRY/php-extended/docker-images:php-7.3-buster-cli-dev"
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php73
+    policy: push
+    paths:
+      - vendor/
+  script:
+    - php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist
+
+composer-7.4:
+  stage: build
+  image: "$CI_REGISTRY/php-extended/docker-images:php-7.4-buster-cli-dev"
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php74
+    policy: push
+    paths:
+      - vendor/
+  script:
+    - php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist
+ 
+composer-8.0:
+  stage: build
+  image: "$CI_REGISTRY/php-extended/docker-images:php-8.0-buster-cli-dev"
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php80
+    policy: push
+    paths:
+      - vendor/
+  script:
+    - php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist
+
+composer-8.1:
+  stage: build
+  image: "$CI_REGISTRY/php-extended/docker-images:php-8.1-buster-cli-dev"
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php81
+    policy: push
+    paths:
+      - vendor/
+  script:
+    - php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist
+
+# End Stage //
+
+# // Stage test
+
+phpcs:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-8.1-buster-cli-dev"
+  needs: ["composer-8.1"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php81
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/php-cs-fixer --version
+    - /vendor/bin/php-cs-fixer fix -v --allow-risky=yes --dry-run
+
+
+phpmd:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-8.1-buster-cli-dev"
+  needs: ["composer-8.1"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php81
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/phpmd --version
+    - /vendor/bin/phpmd ./src ansi ./phpmd.xml
+
+
+phpunit-7.1:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-7.1-buster-cli-dev"
+  needs: ["composer-7.1"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php71
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/phpunit --configuration ./phpunit.xml --coverage-text --colors=never
+
+phpunit-7.2:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-7.2-buster-cli-dev"
+  needs: ["composer-7.2"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php72
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/phpunit --configuration ./phpunit.xml --coverage-text --colors=never
+
+phpunit-7.3:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-7.3-buster-cli-dev"
+  needs: ["composer-7.3"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php73
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/phpunit --configuration ./phpunit.xml --coverage-text --colors=never
+
+phpunit-7.4:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-7.4-buster-cli-dev"
+  needs: ["composer-7.4"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php74
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/phpunit --configuration ./phpunit.xml --coverage-text --colors=never
+
+phpunit-8.0:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-8.0-buster-cli-dev"
+  needs: ["composer-8.0"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php80
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/phpunit --configuration ./phpunit.xml --coverage-text --colors=never
+
+phpunit-8.1:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-8.1-buster-cli-dev"
+  needs: ["composer-8.1"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php81
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/phpunit --configuration ./phpunit.xml --coverage-text --colors=never
+
+
+phpstan-7.1:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-7.1-buster-cli-dev"
+  needs: ["composer-7.1"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php71
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/phpstan --version
+    - /vendor/bin/phpstan analyse --configuration=./phpstan.neon --error-format=gitlab --memory-limit 2G
+
+phpstan-7.2:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-7.2-buster-cli-dev"
+  needs: ["composer-7.2"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php72
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/phpstan --version
+    - /vendor/bin/phpstan analyse --configuration=./phpstan.neon --error-format=gitlab --memory-limit 2G
+
+phpstan-7.3:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-7.3-buster-cli-dev"
+  needs: ["composer-7.3"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php73
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/phpstan --version
+    - /vendor/bin/phpstan analyse --configuration=./phpstan.neon --error-format=gitlab --memory-limit 2G
+
+phpstan-7.4:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-7.4-buster-cli-dev"
+  needs: ["composer-7.4"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php74
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/phpstan --version
+    - /vendor/bin/phpstan analyse --configuration=./phpstan.neon --error-format=gitlab --memory-limit 2G
+
+phpstan-8.0:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-8.0-buster-cli-dev"
+  needs: ["composer-8.0"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php80
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/phpstan --version
+    - /vendor/bin/phpstan analyse --configuration=./phpstan.neon --error-format=gitlab --memory-limit 2G
+
+phpstan-8.1:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-8.1-buster-cli-dev"
+  needs: ["composer-8.1"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php81
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/phpstan --version
+    - /vendor/bin/phpstan analyse --configuration=./phpstan.neon --error-format=gitlab --memory-limit 2G
+
+psalm-7.3:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-7.3-buster-cli-dev"
+  needs: ["composer-7.3"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php73
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/psalm --version
+    - /vendor/bin/psalm --config=./psalm.xml --output-format=console --long-progress --stats --show-info=true --php-version=7.3
+
+psalm-7.4:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-7.4-buster-cli-dev"
+  needs: ["composer-7.4"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php74
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/psalm --version
+    - /vendor/bin/psalm --config=./psalm.xml --output-format=console --long-progress --stats --show-info=true --php-version=7.4
+
+psalm-8.0:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-8.0-buster-cli-dev"
+  needs: ["composer-8.0"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php80
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/psalm --version
+    - /vendor/bin/psalm --config=./psalm.xml --output-format=console --long-progress --stats --show-info=true --php-version=8.0
+
+psalm-8.1:
+  stage: test
+  image: "$CI_REGISTRY/php-extended/docker-images:php-8.1-buster-cli-dev"
+  needs: ["composer-8.1"]
+  except:
+    - tags
+  cache:
+    key: $CI_COMMIT_SHA-php81
+    policy: pull
+    paths:
+      - vendor/
+  script:
+    - if [ -d ./vendor ]; then find ./vendor -maxdepth 2 -mindepth 2 -type d; fi
+    - if [ ! -f ./vendor/autoload.php ]; then php /composer.phar update --ansi --no-interaction --no-progress --prefer-dist; fi
+    - /vendor/bin/psalm --version
+    - /vendor/bin/psalm --config=./psalm.xml --output-format=console --long-progress --stats --show-info=true --php-version=8.1
+
+## End Stage //

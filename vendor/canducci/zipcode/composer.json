@@ -1,0 +1,53 @@
+{
+  "name": "canducci/zipcode",
+  "type": "library",
+  "description": "ZipCode From Brazil",
+  "keywords": [
+    "cep",
+    "zip",
+    "zipcode",
+    "cep from brazil",
+    "laravel"
+  ],
+  "homepage": "https://github.com/netdragoon/zipcode",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Fúlvio",
+      "email": "fulviocanducci@hotmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.2.7",
+    "php-extended/php-simple-cache-filesystem": "^3.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "8.5.2",
+    "phpspec/phpspec": "6.1.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Canducci\\ZipCode\\": "src/Canducci/ZipCode/"
+    },
+    "files": [
+      "src/Canducci/ZipCode/ZipCodeHelper.php",
+      "src/Canducci/ZipCode/ZipCodeAddressHelper.php"
+    ]
+  },
+  "scripts": {
+    "test": "phpunit tests/"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Canducci\\ZipCode\\Providers\\ZipCodeServiceProvider",
+        "Canducci\\ZipCode\\Providers\\ZipCodeAddressServiceProvider"
+      ],
+      "aliases": {
+        "ZipCode": "Canducci\\ZipCode\\Facades\\ZipCode",
+        "Address": "Canducci\\ZipCode\\Facades\\ZipCodeAddress"
+      }
+    }
+  }
+}

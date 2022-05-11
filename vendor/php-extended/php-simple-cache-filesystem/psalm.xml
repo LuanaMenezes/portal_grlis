@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+<psalm
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://raw.githubusercontent.com/vimeo/psalm/master/config.xsd"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    
+    errorLevel="1"
+    reportMixedIssues="true"
+    totallyTyped="true"
+    resolveFromConfigFile="true"
+    useDocblockTypes="true"
+    useDocblockPropertyTypes="true"
+    usePhpDocMethodsWithoutMagicCall="true"
+    usePhpDocPropertiesWithoutMagicCall="true"
+    strictBinaryOperands="true"
+    rememberPropertyAssignmentsAfterCall="true"
+    allowStringToStandInForClass="true"
+    memoizeMethodCallResults="false"
+    hoistConstants="false"
+    addParamDefaultToDocblockType="false"
+    checkForThrowsDocblock="true"
+    checkForThrowsInGlobalScope="true"
+    ignoreInternalFunctionFalseReturn="false"
+    ignoreInternalFunctionNullReturn="false"
+    inferPropertyTypesFromConstructor="true"
+    findUnusedVariablesAndParams="true"
+    findUnusedCode="true"
+    findUnusedPsalmSuppress="true"
+    loadXdebugStub="true"
+    ensureArrayStringOffsetsExist="true"
+    ensureArrayIntOffsetsExist="true"
+    skipChecksOnUnresolvableIncludes="false"
+    sealAllMethods="true"
+    
+    reportInfo="true"
+    allowNamedArgumentCalls="true"
+    triggerErrorExits="default"
+    
+    forbidEcho="true"
+    
+    throwExceptionOnError="false"
+    hideExternalErrors="true"
+    allowFileIncludes="true"
+>
+    <!-- https://psalm.dev -->
+    <!-- error levels (1-8)    : https://psalm.dev/docs/running_psalm/error_levels/ -->
+    <!-- configuration options : https://psalm.dev/docs/running_psalm/configuration/ -->
+    <projectFiles>
+        <directory name="./src" />
+    </projectFiles>
+    <issueHandlers>
+        <!-- Lower Forbidden Code (var_dump) to help debugging -->
+        <ForbiddenCode errorLevel="info" />
+        <!-- Lower Forbidden Echo to help debugging -->
+        <ForbiddenEcho errorLevel="info" />
+        <!-- Suppress MixedAssignment : some methods cannot return typed data -->
+        <MixedAssignment errorLevel="suppress" />
+        <!-- Suppress PossiblyUnusedMethod : we are writing libraries -->
+        <PossiblyUnusedMethod errorLevel="suppress" />
+        <!-- Suppress PossiblyUnusedParam : we are writing libraries -->
+        <PossiblyUnusedParam errorLevel="suppress" />
+        <!-- Suppress PossiblyUnusedProperty : we are writing libraries -->
+        <PossiblyUnusedProperty errorLevel="suppress" />
+        <!-- Suppress PossiblyUnusedReturnValue : we are writing libraries -->
+        <PossiblyUnusedReturnValue errorLevel="suppress" />
+        <!-- Suppress RedundantCast : sometimes does not detect nullable into non nullable usage -->
+        <RedundantCast errorLevel="suppress" />
+        <!-- Suppress RedundantCastGivenDocblockType : we cant be sure if dockblock is enforced -->
+        <RedundantCastGivenDocblockType errorLevel="suppress" />
+        <!-- Suppress RedundantConditionGivenDocblockType : we cant be sure if dockblock is enforced -->
+        <RedundantConditionGivenDocblockType errorLevel="suppress" />
+        <!-- Suppress UnnecessaryVarAnnotation : to have eclipse code completion -->
+        <UnnecessaryVarAnnotation errorLevel="suppress" />
+        <!-- Suppress UnusedClass : we are writing libraries -->
+        <UnusedClass errorLevel="suppress" />
+    </issueHandlers>
+</psalm>
